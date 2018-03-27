@@ -27,8 +27,16 @@ function [Rho,Theta,Phi] = readFile(filename)
         end
     end
     
-    disp(Rho)
-    disp(Theta)
-    disp(Phi)
+    %disp(Rho)
+    %disp(Theta)
+    %disp(Phi)
+    matrix = [Rho Theta Phi];
+    run('controlSystem');
+    set_param('controlSystem/From Workspace', 'VariableName', matrix);
+    %for index = 1:length(Theta)
+    %    set_param('controlSystem/Constant','Value',Theta(index))
+    %    pause(1)
+    %end
+    sim('controlSystem');
 end
 
