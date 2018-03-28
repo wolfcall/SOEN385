@@ -41,29 +41,24 @@ function [thetaDiffs,phiDiffs] = readFile(filename)
     phiDiffs = {};
     phiDiffs = [phiDiffs, 0];
     for index = 2:length(Theta)
-        disp(Theta{index});
         currentThetaDiff = Theta{index} - Theta{index-1};
         currentPhiDiff = Phi{index} - Phi{index-1};
         thetaDiffs = [thetaDiffs, currentThetaDiff];
         phiDiffs = [phiDiffs, currentPhiDiff];
     end
-    %disp(Rho)
-    %disp(Theta)
-    %disp(Phi)
-    VariableName = [Rho; Theta; Phi];
-    %disp(Rho);
-    %disp(Theta);
-    %matrix = {};
-    %matrix(1) = Rho;
-    %matrix(2) = Theta;
-    %matrix(3) = Phi;
+    
     run('controlSystem');
-    %set_param('controlSystem/Step', 'Numerator', "1");
+    for index = 2:length(thetaDiffs)
+        set_param('controlSystem/Step Theta', 'Before', num2str(thetaDiffs{index-1}));
+        set_param('controlSystem/Step Phi', 'Before', num2str(phiDiffs{index-1}));
+        set_param('controlSystem/Step Theta', 'After', num2str(thetaDiffs{index}));
+        set_param('controlSystem/Step Phi', 'After', num2str(phiDiffs{index}));
+        sim('controlSystem');
+    end
     %set_param('controlSystem/From Workspace', 'VariableName', VariableName);
     %for index = 1:length(Theta)
     %    set_param('controlSystem/Constant','Value',Theta(index))
     %    pause(1)
     %end
-    sim('controlSystem');
 end
 
