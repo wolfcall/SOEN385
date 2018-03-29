@@ -22,7 +22,7 @@ function varargout = MainUI(varargin)
 
 % Edit the above text to modify the response to help MainUI
 
-% Last Modified by GUIDE v2.5 22-Mar-2018 11:18:54
+% Last Modified by GUIDE v2.5 29-Mar-2018 11:54:43
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -60,6 +60,11 @@ guidata(hObject, handles);
 
 % UIWAIT makes MainUI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
+
+telescopeWorld = vrworld('cylinder.wrl');
+open(telescopeWorld);
+panel = findall(hObject,'Tag', 'uipanel2');
+vircan = vr.canvas(telescopeWorld, panel);
 end
 
 % --- Outputs from this function are returned to the command line.
@@ -78,6 +83,8 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
 end
 
 % --- Executes on button press in pushbutton2.
