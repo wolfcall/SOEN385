@@ -207,8 +207,6 @@ radiobutn = radio.SelectedObject;
 radioVal= radiobutn.UserData;
 btnVal = hObject.UserData;
 
-controllerName = controllerName + radioVal + btnVal + "Controller.m";
-
-run(controllerName);
+full 
 
 end
