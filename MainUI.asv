@@ -61,10 +61,10 @@ guidata(hObject, handles);
 % UIWAIT makes MainUI wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-%telescopeWorld = vrworld('cylinder.wrl');
-%open(telescopeWorld);
-%panel = findall(hObject,'Tag', 'uipanel2');
-%vircan = vr.canvas(telescopeWorld, panel);
+telescopeWorld = vrworld('plunger.wrl');
+open(telescopeWorld);
+panel = findall(hObject,'Tag', 'uipanel2');
+vircan = vr.canvas(telescopeWorld, panel);
 end
 
 % --- Outputs from this function are returned to the command line.
@@ -84,7 +84,6 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-
 end
 
 % --- Executes on button press in pushbutton2.
@@ -92,6 +91,11 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+telescopeWorld = vrworld('plunger.wrl');
+open(telescopeWorld);
+telescopeWorld.Telescope.rotation = [1 1 1 0]
+telescopeWorld.Sphere.rotation = [1 1 1 0]
 end
 
 % --- Executes on button press in pushbutton3.
@@ -134,7 +138,7 @@ function pushbutton4_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-callscripts(hObject, eventdata, handles);
+btncallscripts(hObject, eventdata, handles);
 end
 
 % --- Executes on button press in pushbutton5.
@@ -143,7 +147,7 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-callscripts(hObject, eventdata, handles);
+btncallscripts(hObject, eventdata, handles);
 end
 
 % --- Executes on button press in pushbutton6.
@@ -152,7 +156,7 @@ function pushbutton6_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-callscripts(hObject, eventdata, handles);
+btncallscripts(hObject, eventdata, handles);
 end
 
 % --- Executes on button press in pushbutton7.
@@ -161,7 +165,7 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-callscripts(hObject, eventdata, handles);
+btncallscripts(hObject, eventdata, handles);
 
 end
 
@@ -174,6 +178,12 @@ function radiobutton1_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
 disp("radio 1");
 
+run('telescoperotation');
+set_param('telescoperotation/G_S1', 'Denominator', "[1 -4 3]");
+set_param('telescoperotation/G_S2', 'Denominator', "[1 -4 3]");
+set_param('telescoperotation/H_S1', 'Denominator', "[1]");
+set_param('telescoperotation/H_S2', 'Denominator', "[1]");
+sim('telescoperotation');
 end
 
 % --- Executes on button press in radiobutton2.
@@ -184,6 +194,13 @@ function radiobutton2_Callback(hObject, eventdata, handles)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
 disp("radio 2");
+
+run('telescoperotation');
+set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
+set_param('telescoperotation/G_S2', 'Denominator', "[1 -2 -3]");
+set_param('telescoperotation/H_S1', 'Denominator', "[10]");
+set_param('telescoperotation/H_S2', 'Denominator', "[10]");
+sim('telescoperotation');
 
 end
 
@@ -198,7 +215,7 @@ disp("radio 3");
 
 end
 
-function callscripts (hObject, eventdata, handles)
+function btncallscripts (hObject, eventdata, handles)
 controllerName = "";
 %global radio 
 radio = findobj('Tag', 'uibuttongroup1');
@@ -207,6 +224,56 @@ radiobutn = radio.SelectedObject;
 radioVal= radiobutn.UserData;
 btnVal = hObject.UserData;
 
-full 
+run('telescoperotation');
+
+%PID, PI, PD, P
+PIDvaluesTF1 = [["78772245.8883" "1033262529.7528" "14994.315"]; ["0" "0" "0"]; ["14293.4747" "0" "903.6407"]; ["0" "0" "0"]]
+PIDvaluesTF2 = [["7872245.8883" "1033262529.7528" "14994.315"]; ["0" "0" "0"]; ["6.0157" "0" "6.0035"]; ["0" "0" "0"]]
+PIDvaluesTF3 = [["60512209999951.46" "3.738581150632655e+26" "0.1021"]; ["663.4084" "7703.8239" "0"]; ["6.0512" "0" "0.49577"]; ["4.9984" "0" "0"]]
+PIDvalues = []
+switch radio
+    case 'a'
+        set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/G_S2', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/H_S1', 'Denominator', "[10]");
+        set_param('telescoperotation/H_S2', 'Denominator', "[10]");
+        PIDvalues = PIDvaluesTF1
+    case 'b'
+        set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/G_S2', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/H_S1', 'Denominator', "[10]");
+        set_param('telescoperotation/H_S2', 'Denominator', "[10]");
+        PIDvalues = PIDvaluesTF2
+    case 'c'
+        set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/G_S2', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/H_S1', 'Denominator', "[10]");
+        set_param('telescoperotation/H_S2', 'Denominator', "[10]");
+        PIDvalues = PIDvaluesTF2
+end
+
+Kp = "0"
+Ki = "0"
+Kd = "0"
+switch btnVal
+    case 'P'
+        PIDvalues = PIDvalues[4]
+    case 'PI'
+        PIDvalues = PIDvalues[2]
+    case 'PD'
+        PIDvalues = PIDvalues[4]
+    case 'PI'
+        
+    case 'PID'
+end
+
+set_param('telescoperotation/KP', 'Value', Kp);
+set_param('telescoperotation/KI', 'Value', Ki);
+set_param('telescoperotation/KD', 'Value', Kd);
+
+sim('telescoperotation');
+controllerName = controllerName + radioVal + btnVal + "Controller.m";
+
+run(controllerName);
 
 end

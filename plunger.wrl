@@ -17,7 +17,7 @@ Background {
 			  0.222549 0.390234 0.7,
 			  0.60094 0.662637 0.69 ]
 }
-Transform {
+DEF Telescope Transform {
 	translation	1.10641e-006 8.64267e-007 3.21981e-014
 	scale	0.999996 0.999997 0.999997
 	children [ 
@@ -35,7 +35,7 @@ Transform {
 
 	    }
 
-	    Transform {
+	    DEF Sphere Transform {
 		    children [ 
 			Shape {
 				appearance	Appearance {
@@ -58,10 +58,6 @@ Transform {
 						    material	Material {
 							    ambientIntensity	0.2
 							    diffuseColor	0.8 0.0838624 0.643018
-							    emissiveColor	0 0 0
-							    shininess	0.2
-							    specularColor	0 0 0
-							    transparency	0
 						    }
 
 					    }
