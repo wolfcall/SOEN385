@@ -265,17 +265,19 @@ Kp = PIDvalues(1);
 Ki = PIDvalues(2);
 Kd = PIDvalues(3);
 
-%Set PID K values
-set_param('telescoperotation/KP', 'Value', Kp);
-set_param('telescoperotation/KI', 'Value', Ki);
-set_param('telescoperotation/KD', 'Value', Kd);
-
 %Set T value
 time = get(handles.edit5, 'String');
 time = num2str(str2double(time)*2 + settlingTime);
 
 
-sim('telescoperotation', "StartTime", "0", "StopTime", time);
+%Set PID K values
+set_param('telescoperotation/KP', 'Value', Kp);
+set_param('telescoperotation/KI', 'Value', Ki);
+set_param('telescoperotation/KD', 'Value', Kd);
+set_param('telescoperotation/Time', 'Value', time);
+
+
+sim('telescoperotation', "StartTime", "0", "StopTime", 300);
 readFile("data.txt", time);
 
 controllerName = controllerName + radioVal + btnVal + "Controller.m";
