@@ -1,4 +1,4 @@
-function [thetaDiffs,phiDiffs] = readFile(filename)
+function [thetaDiffs,phiDiffs] = readFile(filename, time)
     %READFILE Reads from filename and creates an array of data
     %   reads all lines of a file containing data in ses of 3 per line
     %   delimited by spaces
@@ -47,13 +47,13 @@ function [thetaDiffs,phiDiffs] = readFile(filename)
         phiDiffs = [phiDiffs, currentPhiDiff];
     end
     
-    run('controlSystem');
+    run('telescoperotation');
     for index = 2:length(thetaDiffs)
-        set_param('controlSystem/Step Theta', 'Before', num2str(thetaDiffs{index-1}));
-        set_param('controlSystem/Step Phi', 'Before', num2str(phiDiffs{index-1}));
-        set_param('controlSystem/Step Theta', 'After', num2str(thetaDiffs{index}));
-        set_param('controlSystem/Step Phi', 'After', num2str(phiDiffs{index}));
-        sim('controlSystem');
+        set_param('telescoperotation/Step Theta', 'Before', num2str(thetaDiffs{index-1}));
+        set_param('telescoperotation/Step Phi', 'Before', num2str(phiDiffs{index-1}));
+        set_param('telescoperotation/Step Theta', 'After', num2str(thetaDiffs{index}));
+        set_param('telescoperotation/Step Phi', 'After', num2str(phiDiffs{index}));
+        sim('telescoperotation', "StartTime", "0", "EndTime", time);
     end
     %set_param('controlSystem/From Workspace', 'VariableName', VariableName);
     %for index = 1:length(Theta)
