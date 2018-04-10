@@ -94,8 +94,8 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 
 telescopeWorld = vrworld('plunger.wrl');
 open(telescopeWorld);
-telescopeWorld.Telescope.rotation = [1 1 1 0]
-telescopeWorld.Sphere.rotation = [1 1 1 0]
+telescopeWorld.Telescope.rotation = [1 1 1 0];
+telescopeWorld.Sphere.rotation = [1 1 1 0];
 end
 
 % --- Executes on button press in pushbutton3.
@@ -176,7 +176,6 @@ function radiobutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
-disp("radio 1");
 
 end
 
@@ -187,7 +186,6 @@ function radiobutton2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
-disp("radio 2");
 
 end
 
@@ -198,7 +196,6 @@ function radiobutton3_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton3
-disp("radio 3");
 
 end
 
@@ -223,6 +220,7 @@ settlingtimes3 = [1.91e-13,0.00492,1.92,1.96];
 
 PIDvalues = [];
 settlingtimes = [];
+
 switch radioVal
     case 'a'
         set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
@@ -273,10 +271,11 @@ set_param('telescoperotation/KI', 'Value', Ki);
 set_param('telescoperotation/KD', 'Value', Kd);
 
 %Set T value
-time = get(handles.time, 'String');
+time = get(handles.edit5, 'String');
 time = num2str(str2double(time)*2 + settlingTime);
 
-sim('telescoperotation', "StartTime", "0", "EndTime", time);
+
+sim('telescoperotation', "StartTime", "0", "StopTime", time);
 readFile("data.txt", time);
 
 controllerName = controllerName + radioVal + btnVal + "Controller.m";

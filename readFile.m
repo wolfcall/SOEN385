@@ -53,7 +53,7 @@ function [thetaDiffs,phiDiffs] = readFile(filename, time)
         set_param('telescoperotation/Step Phi', 'Before', num2str(phiDiffs{index-1}));
         set_param('telescoperotation/Step Theta', 'After', num2str(thetaDiffs{index}));
         set_param('telescoperotation/Step Phi', 'After', num2str(phiDiffs{index}));
-        sim('telescoperotation', "StartTime", "0", "EndTime", time);
+        sim('telescoperotation', "StartTime", "0", "StopTime", time);
     end
     %set_param('controlSystem/From Workspace', 'VariableName', VariableName);
     %for index = 1:length(Theta)
