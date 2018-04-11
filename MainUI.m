@@ -223,8 +223,8 @@ settlingtimes = [];
 
 switch radioVal
     case 'a'
-        set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
-        set_param('telescoperotation/G_S2', 'Denominator', "[1 -2 -3]");
+        set_param('telescoperotation/G_S1', 'Denominator', "[1 -4 +3]");
+        set_param('telescoperotation/G_S2', 'Denominator', "[1 -4 +3]");
         set_param('telescoperotation/H_S1', 'Denominator', "[10]");
         set_param('telescoperotation/H_S2', 'Denominator', "[10]");
         PIDvalues = PIDvaluesTF1;
@@ -246,19 +246,24 @@ switch radioVal
 end
 
 settlingTime = 0;
+clockdValue = 0.1;
 switch btnVal
     case 'P'
         PIDvalues = PIDvalues(4,:);
         settlingTime = settlingtimes(4);
+        clockdValue = 0.0001;
     case 'PI'
         PIDvalues = PIDvalues(2,:);
         settlingTime = settlingtimes(2);
+        clockdValue = 0.0001;
     case 'PD'
         PIDvalues = PIDvalues(3,:);
         settlingTime = settlingtimes(3);
+        clockdValue = 0.001;
     case 'PID'
         PIDvalues = PIDvalues(1,:);
         settlingTime = settlingtimes(1);
+        clockdValue = 0.001;
 end
 
 Kp = PIDvalues(1);
@@ -275,9 +280,10 @@ set_param('telescoperotation/KP', 'Value', Kp);
 set_param('telescoperotation/KI', 'Value', Ki);
 set_param('telescoperotation/KD', 'Value', Kd);
 set_param('telescoperotation/Time', 'Value', time);
+set_param('telescoperotation/clockD','Value',num2str(clockdValue));
 
 
-sim('telescoperotation', "StartTime", "0", "StopTime", "300");
+sim('telescoperotation', "StartTime", "0", "StopTime", '1000000');
 %readFile("data.txt", time);
 
 controllerName = controllerName + radioVal + btnVal + "Controller.m";
