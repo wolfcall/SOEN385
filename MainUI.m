@@ -268,7 +268,7 @@ Kd = PIDvalues(3);
 %Set T value
 time = get(handles.edit5, 'String');
 time = num2str(str2double(time)*2 + settlingTime);
-
+totalTime = str2double(time) * 100
 
 %Set PID K values
 set_param('telescoperotation/KP', 'Value', Kp);
