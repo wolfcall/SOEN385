@@ -277,8 +277,8 @@ set_param('telescoperotation/KD', 'Value', Kd);
 set_param('telescoperotation/Time', 'Value', time);
 
 
-sim('telescoperotation', "StartTime", "0", "StopTime", 300);
-readFile("data.txt", time);
+sim('telescoperotation', "StartTime", "0", "StopTime", "300");
+%readFile("data.txt", time);
 
 controllerName = controllerName + radioVal + btnVal + "Controller.m";
 
