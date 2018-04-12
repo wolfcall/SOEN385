@@ -46,7 +46,7 @@ function [thetaDiffs,phiDiffs] = readFile(filename, time)
         thetaDiffs = [thetaDiffs, currentThetaDiff];
         phiDiffs = [phiDiffs, currentPhiDiff];
     end
-    
+
     run('telescoperotation');
     for index = 2:length(thetaDiffs)
         set_param('telescoperotation/Step Theta', 'Before', num2str(thetaDiffs{index-1}));
