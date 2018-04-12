@@ -46,15 +46,16 @@ function [thetaDiffs,phiDiffs] = readFile(filename, time)
         thetaDiffs = [thetaDiffs, currentThetaDiff];
         phiDiffs = [phiDiffs, currentPhiDiff];
     end
-    
-    run('telescoperotation');
-    for index = 2:length(thetaDiffs)
-        set_param('telescoperotation/Step Theta', 'Before', num2str(thetaDiffs{index-1}));
-        set_param('telescoperotation/Step Phi', 'Before', num2str(phiDiffs{index-1}));
-        set_param('telescoperotation/Step Theta', 'After', num2str(thetaDiffs{index}));
-        set_param('telescoperotation/Step Phi', 'After', num2str(phiDiffs{index}));
-        sim('telescoperotation', "StartTime", "0", "EndTime", time);
-    end
+    celldisp(thetaDiffs)
+    celldisp(phiDiffs)
+    %run('telescoperotation');
+    %for index = 2:length(thetaDiffs)
+    %    set_param('telescoperotation/Step Theta', 'Before', num2str(thetaDiffs{index-1}));
+    %    set_param('telescoperotation/Step Phi', 'Before', num2str(phiDiffs{index-1}));
+    %    set_param('telescoperotation/Step Theta', 'After', num2str(thetaDiffs{index}));
+    %    set_param('telescoperotation/Step Phi', 'After', num2str(phiDiffs{index}));
+    %    sim('telescoperotation', "StartTime", "0", "StopTime", time);
+    %end
     %set_param('controlSystem/From Workspace', 'VariableName', VariableName);
     %for index = 1:length(Theta)
     %    set_param('controlSystem/Constant','Value',Theta(index))

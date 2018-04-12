@@ -94,8 +94,8 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 
 telescopeWorld = vrworld('plunger.wrl');
 open(telescopeWorld);
-telescopeWorld.Telescope.rotation = [1 1 1 0]
-telescopeWorld.Sphere.rotation = [1 1 1 0]
+telescopeWorld.Telescope.rotation = [1 1 1 0];
+telescopeWorld.Sphere.rotation = [1 1 1 0];
 end
 
 % --- Executes on button press in pushbutton3.
@@ -176,7 +176,6 @@ function radiobutton1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
-disp("radio 1");
 
 end
 
@@ -187,7 +186,6 @@ function radiobutton2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton2
-disp("radio 2");
 
 end
 
@@ -198,7 +196,6 @@ function radiobutton3_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of radiobutton3
-disp("radio 3");
 
 end
 
@@ -214,21 +211,22 @@ btnVal = hObject.UserData;
 run('telescoperotation');
 
 %PID, PI, PD, P
-PIDvaluesTF1 = [["78772245.8883" "1033262529.7528" "14994.315"]; ["0" "0" "0"]; ["14293.4747" "0" "903.6407"]; ["0" "0" "0"]];
-PIDvaluesTF2 = [["7872245.8883" "1033262529.7528" "14994.315"]; ["0" "0" "0"]; ["6.0157" "0" "6.0035"]; ["0" "0" "0"]];
-PIDvaluesTF3 = [["60512209999951.46" "3.738581150632655e+26" "0.1021"]; ["663.4084" "7703.8239" "0"]; ["6.0512" "0" "0.49577"]; ["4.9984" "0" "0"]];
-settlingtimes1 = [0.00156,0,0.00361,0];
-settlingtimes2 = [0.00156,0,1.28,0];
-settlingtimes3 = [1.91e-13,0.00492,1.92,1.96];
+PIDvaluesTF1 = [["186731196.541541" "91886034274.1145" "84315.0735841261" "9639452.32854712"]; ["0" "0" "0" "0"]; ["1426.18364918471" "0" "403.693322671382" "46137.3195795217"]; ["0" "0" "0" "0"]];
+PIDvaluesTF2 = [["5904636478.44973" "5166708214766.51" "1499316.6570894" "17141171.5925145"]; ["0" "0" "0" "0"]; ["120.745231360679" "0" "134.033758414437" "1492.93363462695"]; ["0" "0" "0" "0"]];
+PIDvaluesTF3 = [["5904636478.44973" "5166708214766.51" "1499316.6570894" "17141171.5925145"]; ["0" "0" "0" "0"]; ["160.490144165184" "0" "152.837830857296" "1714.11715925144"]; ["0" "0" "0" "0"]];
+settlingtimes1 = [0.000192,0,0.00361,0];
+settlingtimes2 = [0.000108,0,1.03,0];
+settlingtimes3 = [0.000108,0,0.276,0];
 
 PIDvalues = [];
 settlingtimes = [];
+
 switch radioVal
     case 'a'
-        set_param('telescoperotation/G_S1', 'Denominator', "[1 -2 -3]");
-        set_param('telescoperotation/G_S2', 'Denominator', "[1 -2 -3]");
-        set_param('telescoperotation/H_S1', 'Denominator', "[10]");
-        set_param('telescoperotation/H_S2', 'Denominator', "[10]");
+        set_param('telescoperotation/G_S1', 'Denominator', "[1 -4 +3]");
+        set_param('telescoperotation/G_S2', 'Denominator', "[1 -4 +3]");
+        set_param('telescoperotation/H_S1', 'Denominator', "[1]");
+        set_param('telescoperotation/H_S2', 'Denominator', "[1]");
         PIDvalues = PIDvaluesTF1;
         settlingtimes = settlingtimes1;
     case 'b'
@@ -244,40 +242,54 @@ switch radioVal
         set_param('telescoperotation/H_S1', 'Denominator', "[10 10]");
         set_param('telescoperotation/H_S2', 'Denominator', "[10 10]");
         PIDvalues = PIDvaluesTF3;
-        settlingtimes = settlingtimes1;
+        settlingtimes = settlingtimes3;
 end
 
 settlingTime = 0;
+clockdValue = 0.1;
 switch btnVal
     case 'P'
         PIDvalues = PIDvalues(4,:);
         settlingTime = settlingtimes(4);
+        clockdValue = 0.0001;
     case 'PI'
         PIDvalues = PIDvalues(2,:);
         settlingTime = settlingtimes(2);
+        clockdValue = 0.0001;
     case 'PD'
         PIDvalues = PIDvalues(3,:);
         settlingTime = settlingtimes(3);
+        clockdValue = 0.001;
     case 'PID'
         PIDvalues = PIDvalues(1,:);
         settlingTime = settlingtimes(1);
+        clockdValue = 0.001;
 end
 
 Kp = PIDvalues(1);
 Ki = PIDvalues(2);
 Kd = PIDvalues(3);
+N = PIDvalues(4);
+
+%Set T value
+txtbx = findobj('Tag', 'edit5');
+time = get(txtbx, 'String')
+%time = time{1};
+time = num2str(str2double(time)*2 + settlingTime);
+totalTime = str2double(time) * 100
+%time = 5;
 
 %Set PID K values
 set_param('telescoperotation/KP', 'Value', Kp);
 set_param('telescoperotation/KI', 'Value', Ki);
 set_param('telescoperotation/KD', 'Value', Kd);
+set_param('telescoperotation/N', 'Value', N);
+set_param('telescoperotation/Time', 'Value', time);
+set_param('telescoperotation/clockD','Value',num2str(clockdValue));
 
-%Set T value
-time = get(handles.time, 'String');
-time = num2str(str2double(time)*2 + settlingTime);
 
-sim('telescoperotation', "StartTime", "0", "EndTime", time);
-readFile("data.txt", time);
+sim('telescoperotation', "StartTime", "0", "StopTime", '1000000');
+%readFile("data.txt", time);
 
 controllerName = controllerName + radioVal + btnVal + "Controller.m";
 
