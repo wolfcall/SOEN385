@@ -225,8 +225,8 @@ switch radioVal
     case 'a'
         set_param('telescoperotation/G_S1', 'Denominator', "[1 -4 +3]");
         set_param('telescoperotation/G_S2', 'Denominator', "[1 -4 +3]");
-        set_param('telescoperotation/H_S1', 'Denominator', "[10]");
-        set_param('telescoperotation/H_S2', 'Denominator', "[10]");
+        set_param('telescoperotation/H_S1', 'Denominator', "[1]");
+        set_param('telescoperotation/H_S2', 'Denominator', "[1]");
         PIDvalues = PIDvaluesTF1;
         settlingtimes = settlingtimes1;
     case 'b'
